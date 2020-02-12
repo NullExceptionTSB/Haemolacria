@@ -1,0 +1,36 @@
+﻿cl : Command line warning D9025: overriding '/sdl-' with '/GS-'
+  main.c
+main.c(586): warning C4047: 'function': 'DWORD' differs in levels of indirection from 'void *'
+main.c(586): warning C4024: 'CreateFileW': different types for formal and actual parameter 3
+main.c(679): warning C4047: 'function': 'DWORD' differs in levels of indirection from 'void *'
+main.c(679): warning C4024: 'RegSetValueExW': different types for formal and actual parameter 3
+main.c(679): warning C4133: 'function': incompatible types - from 'unsigned short [29]' to 'const BYTE *'
+main.c(683): warning C4047: 'function': 'DWORD' differs in levels of indirection from 'void *'
+main.c(683): warning C4024: 'RegSetValueExW': different types for formal and actual parameter 3
+main.c(683): warning C4133: 'function': incompatible types - from 'DWORD *' to 'const BYTE *'
+main.c(687): warning C4047: 'function': 'DWORD' differs in levels of indirection from 'void *'
+main.c(687): warning C4024: 'RegSetValueExW': different types for formal and actual parameter 3
+main.c(687): warning C4133: 'function': incompatible types - from 'DWORD *' to 'const BYTE *'
+main.c(694): warning C4133: 'function': incompatible types - from 'DWORD *' to 'PBOOLEAN'
+main.c(706): warning C4113: 'FARPROC' differs in parameter lists from 'LPTHREAD_START_ROUTINE'
+main.c(706): warning C4133: 'function': incompatible types - from 'FARPROC' to 'LPTHREAD_START_ROUTINE'
+main.c(709): warning C4047: 'function': 'SIZE_T' differs in levels of indirection from 'void *'
+main.c(709): warning C4024: 'NtCreateThreadEx': different types for formal and actual parameter 8
+main.c(709): warning C4024: 'NtCreateThreadEx': different types for formal and actual parameter 9
+main.c(709): warning C4024: 'NtCreateThreadEx': different types for formal and actual parameter 10
+main.c(730): warning C4113: 'FARPROC' differs in parameter lists from 'LPTHREAD_START_ROUTINE'
+main.c(730): warning C4133: 'function': incompatible types - from 'FARPROC' to 'LPTHREAD_START_ROUTINE'
+main.c(733): warning C4047: 'function': 'SIZE_T' differs in levels of indirection from 'void *'
+main.c(733): warning C4024: 'NtCreateThreadEx': different types for formal and actual parameter 8
+main.c(733): warning C4024: 'NtCreateThreadEx': different types for formal and actual parameter 9
+main.c(733): warning C4024: 'NtCreateThreadEx': different types for formal and actual parameter 10
+main.c(690): warning C4113: 'FARPROC' differs in parameter lists from 'NtCreateThreadExDef'
+main.c(690): warning C4133: 'initializing': incompatible types - from 'FARPROC' to 'NtCreateThreadExDef'
+main.c(691): warning C4113: 'FARPROC' differs in parameter lists from 'RtlCreateUserThreadDef'
+main.c(691): warning C4133: 'initializing': incompatible types - from 'FARPROC' to 'RtlCreateUserThreadDef'
+main.c(692): warning C4113: 'FARPROC' differs in parameter lists from 'RtlAdjustPrivilegeDef'
+main.c(692): warning C4133: 'initializing': incompatible types - from 'FARPROC' to 'RtlAdjustPrivilegeDef'
+main.c(693): warning C4113: 'FARPROC' differs in parameter lists from 'NtSetInformationProcessDef'
+main.c(693): warning C4133: 'initializing': incompatible types - from 'FARPROC' to 'NtSetInformationProcessDef'
+  HaemolacriaLoader.vcxproj -> C:\Users\SirenSeven\Documents\Visual Studio 2017\Projects\HaemolacriaLoader\x64\Debug\HaemolacriaLoader.exe
+  HaemolacriaLoader.vcxproj -> C:\Users\SirenSeven\Documents\Visual Studio 2017\Projects\HaemolacriaLoader\x64\Debug\HaemolacriaLoader.pdb (Partial PDB)
