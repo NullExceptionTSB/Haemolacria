@@ -9,3 +9,5 @@ the payload (Haemolacria) is the actual payload which does all the fun stuff. it
 oh and the code is the definition of a mess<br>
 
 has been demonstrated in a video by Siam Alam: https://www.youtube.com/watch?v=YDUVo_4ybRU
+
+for a more readable DLL injection implementation see my gist at https://gist.github.com/NullExceptionTSB/837fc5e76003974faaa0e11d9ede6d51
